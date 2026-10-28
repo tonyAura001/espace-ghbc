@@ -1,0 +1,253 @@
+/* Polices auto-hébergées (sous-ensemble latin : accents français, guillemets, espaces fines) */
+@import '@fontsource/lexend/latin-400.css';
+@import '@fontsource/lexend/latin-500.css';
+@import '@fontsource/lexend/latin-600.css';
+@import '@fontsource/source-sans-3/latin-400.css';
+@import '@fontsource/source-sans-3/latin-600.css';
+@import '@fontsource/source-sans-3/latin-700.css';
+@import 'tailwindcss';
+
+/*
+ * Jetons du design system « Espace GHBC »
+ *  Bleu GHBC  #0249A2  navigation, actions principales
+ *  Vert GHBC  #02A73A  aplats de ce qui est acquis ; #00782A pour le texte vert (contraste AA)
+ *  Encre      #14213D  texte
+ *  Brume      #F2F5F9  fond bleu-gris
+ *  Ambre      #B26A00  attention
+ *  Rouge      #C0262D  blocage
+ *  Cycles : crèche corail, maternelle soleil, primaire bleu, collège vert (pastilles et filets uniquement)
+ */
+@theme {
+  --color-bleu: #0249a2;
+  --color-bleu-fonce: #013a82;
+  --color-bleu-nuit: #012a5e;
+  --color-bleu-clair: #e7eef9;
+  --color-bleu-ligne: #c4d4ee;
+  --color-vert: #02a73a;
+  --color-vert-texte: #00782a;
+  --color-vert-clair: #e5f5eb;
+  --color-encre: #14213d;
+  --color-encre-2: #46526b;
+  --color-encre-3: #6b7690;
+  --color-ligne: #dce3ec;
+  --color-ligne-2: #eaeef4;
+  --color-brume: #f2f5f9;
+  --color-ambre: #b26a00;
+  --color-ambre-clair: #fff3dc;
+  --color-rouge: #c0262d;
+  --color-rouge-clair: #fdecec;
+  --color-creche: #e8735a;
+  --color-maternelle: #e3a600;
+  --color-primaire: #2f6fd6;
+  --color-college: #2e9e5b;
+
+  --font-titre: 'Lexend', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-texte: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+
+  --breakpoint-lg: 80rem; /* 1280 */
+  --breakpoint-xl: 90rem; /* 1440 */
+  --breakpoint-2xl: 120rem; /* 1920 */
+
+  --shadow-panneau: 0 12px 40px -12px rgb(1 42 94 / 0.28), 0 2px 6px rgb(1 42 94 / 0.08);
+  --animate-entree: entree 0.24s ease-out;
+}
+
+@keyframes entree {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Taille de base fluide : lisible au vidéoprojecteur, sans déborder à 1280 × 720 (Windows 150 %) */
+html {
+  font-size: clamp(14.5px, 0.42vw + 9.6px, 17px);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: var(--font-texte);
+  color: var(--color-encre);
+  background: var(--color-brume);
+  font-size: 1rem;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'kern';
+}
+#root {
+  min-height: 100dvh;
+}
+
+h1, h2, h3, h4, .titre {
+  font-family: var(--font-titre);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.chiffre {
+  font-family: var(--font-titre);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.tabulaire, table {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tableaux denses mais aérés (dans une couche : les classes utilitaires gardent la priorité) */
+@layer components {
+.tableau {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.tableau th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-encre-2);
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-ligne);
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  white-space: nowrap;
+}
+.tableau td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-ligne-2);
+  vertical-align: middle;
+}
+.tableau tbody tr:hover td {
+  background: #f7f9fc;
+}
+.tableau tr.cliquable {
+  cursor: pointer;
+}
+
+}
+
+/* Focus visible et cohérent */
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-bleu) 55%, transparent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Barres de défilement discrètes */
+.defilement {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ligne) transparent;
+}
+
+/* Squelettes de chargement */
+.squelette {
+  background: linear-gradient(90deg, #e9eef5 0%, #f4f7fb 50%, #e9eef5 100%);
+  background-size: 200% 100%;
+  animation: squelette 1.2s ease-in-out infinite;
+  border-radius: 6px;
+}
+@keyframes squelette {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Pulsation douce pour ce qui vient de changer en direct */
+@keyframes flash {
+  0% {
+    background: color-mix(in srgb, var(--color-vert) 22%, transparent);
+  }
+  100% {
+    background: transparent;
+  }
+}
+.flash {
+  animation: flash 2.2s ease-out;
+}
+
+@keyframes pouls {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.pouls {
+  animation: pouls 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* --------------------------------------------------------- Impression */
+.feuille-a4 {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 14mm 14mm 12mm;
+  background: #fff;
+  color: #14213d;
+  box-sizing: border-box;
+}
+.feuille-a5 {
+  width: 148mm;
+  min-height: 210mm;
+  padding: 10mm;
+  background: #fff;
+  box-sizing: border-box;
+}
+.ticket-80 {
+  width: 80mm;
+  padding: 4mm 4mm 6mm;
+  background: #fff;
+  box-sizing: border-box;
+  font-family: 'Source Sans 3', 'Courier New', monospace;
+}
+
+@media print {
+  @page {
+    margin: 0;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .zone-impression,
+  .zone-impression * {
+    visibility: visible;
+  }
+  .zone-impression {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .echelle-apercu {
+    transform: none !important;
+  }
+  .zone-impression .pas-imprime {
+    display: none !important;
+  }
+  .feuille-a4,
+  .feuille-a5 {
+    break-after: page;
+  }
+}

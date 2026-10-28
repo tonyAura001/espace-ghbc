@@ -1,0 +1,25 @@
+// Vérifie qu'un QR de reçu ouvre bien « Reçu authentique » sur un autre appareil : BASE=… npx tsx scripts/verif-qr.ts
+import { chromium, devices } from '@playwright/test'
+const BASE = process.env.BASE ?? 'https://espace-ghbc.vercel.app/'
+const nav = await chromium.launch()
+const page = await nav.newPage({ viewport: { width: 1536, height: 864 } })
+await page.goto(BASE)
+await page.evaluate(() => sessionStorage.setItem('ghbc-ok', '1'))
+await page.reload()
+await page.goto(BASE + '#/connexion')
+await page.getByTestId('profil-direction').dblclick()
+await page.waitForTimeout(600)
+await page.goto(BASE + '#/caisse/recus')
+await page.waitForTimeout(1200)
+await page.getByTestId('ligne-recu').first().click()
+await page.waitForTimeout(1500)
+const html = await page.content()
+const lien = html.match(/https?:\/\/[^"<\s]*#\/verifier\/recu\/[A-Za-z0-9_\-.]+/)?.[0]
+console.log('lien du QR :', lien?.slice(0, 90) + '…')
+const tel = await nav.newContext({ ...devices['iPhone 13'] })
+const p2 = await tel.newPage()
+await p2.goto(lien!)
+await p2.waitForTimeout(1500)
+console.log('téléphone :', (await p2.evaluate(() => document.body.innerText)).split('\n').slice(0, 6).join(' | '))
+await p2.screenshot({ path: process.env.OUT ?? 'verif-qr.png' })
+await nav.close()
